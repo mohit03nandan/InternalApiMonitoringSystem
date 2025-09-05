@@ -1,0 +1,17 @@
+# Kafka consumer
+confluent-kafka==2.2.0
+
+# Redis
+aioredis==2.0.1
+
+# Async utilities
+asyncio==3.4.3
+
+# AWS notifications
+boto3==1.30.0
+
+# Logging
+loguru==0.7.0
+
+# Optional env
+python-dotenv==1.1.1

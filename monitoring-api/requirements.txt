@@ -1,0 +1,23 @@
+fastapi==0.102.0
+uvicorn[standard]==0.23.1
+
+# Database
+SQLAlchemy==2.0.24
+asyncpg==0.27.0
+alembic==2.0.10
+databases[postgresql]==0.7.4
+
+# Redis
+aioredis==2.0.1
+
+# Kafka
+confluent-kafka==2.2.0
+
+# Pydantic
+pydantic==2.5.2
+
+# Optional for environment vars
+python-dotenv==1.1.1
+
+# For logging / monitoring
+loguru==0.7.0

@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+
+  # FastAPI Core API (Producer)
+  fastapi:
+    build: ./monitoring-api
+    container_name: monitoring_api
+    environment:
+      - DATABASE_URL=${DATABASE_URL}      # Neon Postgres URL
+      - REDIS_URL=${REDIS_URL}            # Redis Cloud URL
+      - KAFKA_BROKER=${KAFKA_BROKER}      # Confluent Cloud Bootstrap Servers
+      - KAFKA_USERNAME=${KAFKA_USERNAME}  # Confluent Cloud API Key
+      - KAFKA_PASSWORD=${KAFKA_PASSWORD}  # Confluent Cloud API Secret
+    ports:
+      - "8000:8000"
+    depends_on: []
+
+  # Health Check Worker (Producer to Kafka)
+  worker:
+    build: ./worker
+    container_name: health_worker
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - KAFKA_BROKER=${KAFKA_BROKER}
+      - KAFKA_USERNAME=${KAFKA_USERNAME}
+      - KAFKA_PASSWORD=${KAFKA_PASSWORD}
+    depends_on:
+      - fastapi
+
+  # Alerting Consumer (Kafka Consumer)
+  consumer:
+    build: ./alerting-consumer
+    container_name: alert_consumer
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - KAFKA_BROKER=${KAFKA_BROKER}
+      - KAFKA_USERNAME=${KAFKA_USERNAME}
+      - KAFKA_PASSWORD=${KAFKA_PASSWORD}
+      - NOTIFY_EMAIL=on                     # Use SES/SNS or other notifier
+      - NOTIFY_WEBHOOK=on
+    depends_on:
+      - fastapi
+
+  # Frontend (React Dashboard)
+  frontend:
+    build: ./frontend
+    container_name: monitoring_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - fastapi
