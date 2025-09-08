@@ -16,6 +16,7 @@ confluent-kafka==2.2.0
 
 # Pydantic
 pydantic==2.9.2
+pydantic-settings==2.3.4
 
 # Environment variables
 python-dotenv==1.0.1
