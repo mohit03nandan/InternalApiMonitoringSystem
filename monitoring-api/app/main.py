@@ -1,14 +1,18 @@
+import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from .api.router import router
 from .db.session import db
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("Starting up...")
+    logger.info("Starting up...")
     await db.init_db()
     yield
-    print("Shutting down...")
+    logger.info("Shutting down...")
     await db.close_db()
 
 app=FastAPI(
